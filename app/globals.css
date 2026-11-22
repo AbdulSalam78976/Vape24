@@ -1,26 +1,149 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* Vape24 theme — pulled from the logo: signal red, ink black, white, smoke grey. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-brand: #e10600;
+  --color-brand-dark: #b00500;
+  --color-ink: #0b0b0b;
+  --color-smoke: #f4f4f5;
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-anton);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+  max-width: 80rem;
+}
+
+@layer components {
+  .font-display { font-family: var(--font-anton); letter-spacing: 0.01em; }
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-md bg-brand px-4 py-2.5 font-bold text-white transition duration-200 ease-out hover:-translate-y-px hover:bg-brand-dark hover:shadow-[0_8px_20px_-6px_rgb(225_6_0/0.6)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand active:translate-y-0 active:scale-[0.97] active:shadow-none;
   }
+  .card-lift {
+    @apply transition duration-300 ease-out hover:-translate-y-1 hover:border-ink hover:shadow-[0_16px_32px_-14px_rgb(11_11_11/0.35)];
+  }
+  .badge { @apply rounded px-1.5 py-0.5 text-[11px] font-bold uppercase; }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-white text-ink antialiased;
 }
+
+.marquee { animation: marquee 38s linear infinite; }
+.marquee:hover { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .marquee { animation: none; } }
+
+/* Pipe loader: draw line 0–1.6s → fill → ember 1.8s → smoke 2s+ */
+.pipe-draw { stroke-dasharray: 1; fill-opacity: 0; animation: pipe-draw 2s ease-in-out both; }
+@keyframes pipe-draw {
+  0% { stroke-dashoffset: 1; fill-opacity: 0; }
+  75% { stroke-dashoffset: 0; fill-opacity: 0; }
+  100% { stroke-dashoffset: 0; fill-opacity: 1; }
+}
+.pipe-ember { opacity: 0; animation: ember-on 0.4s 1.8s both, ember-glow 1.2s 2.2s ease-in-out infinite; }
+@keyframes ember-on { to { opacity: 1; } }
+@keyframes ember-glow { 50% { opacity: 0.6; } }
+.pipe-smoke-line { stroke-dasharray: 1; animation: smoke-line 2.2s ease-out 2s infinite both; }
+@keyframes smoke-line {
+  0% { stroke-dashoffset: 1; opacity: 0; transform: translateY(0); }
+  15% { opacity: 0.9; }
+  60% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; opacity: 0; transform: translateY(-24px); }
+}
+.pipe-puff { transform-box: fill-box; transform-origin: center; animation: puff 2.2s ease-out infinite both; }
+@keyframes puff {
+  0% { transform: translate(0, 0) scale(0.3); opacity: 0; }
+  25% { opacity: 0.8; }
+  100% { transform: translate(-12px, -70px) scale(2.6); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pipe-draw, .pipe-ember, .pipe-smoke-line, .pipe-puff { animation: none; opacity: 1; fill-opacity: 1; stroke-dashoffset: 0; }
+  .pipe-puff { opacity: 0.4; }
+}
+
+/* ───────────── Motion system ───────────── */
+:root { --ease-out: cubic-bezier(0.22, 1, 0.36, 1); --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); }
+html { scroll-behavior: smooth; }
+
+/* Page transitions (React <ViewTransition default="page"> in layout) */
+::view-transition { pointer-events: none; }
+::view-transition-old(.page) { animation: vt-out 160ms ease-in both; }
+::view-transition-new(.page) { animation: vt-in 380ms var(--ease-out) both; }
+@keyframes vt-out { to { opacity: 0; transform: translateY(-6px); } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(14px); } }
+::view-transition-group(site-header) { animation: none; z-index: 100; }
+::view-transition-old(site-header) { display: none; }
+::view-transition-new(site-header) { animation: none; }
+
+/* Scroll reveal — native scroll-driven animation; browsers without it just show content */
+@supports (animation-timeline: view()) {
+  .reveal { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
+}
+@keyframes reveal { from { opacity: 0; transform: translateY(28px); } }
+
+/* Mega menu: open after a short hover-intent delay, close instantly */
+.mega { transition: opacity 200ms var(--ease-out), translate 260ms var(--ease-out), visibility 200ms; }
+.group:hover > .mega, .group:focus-within > .mega { transition-delay: 90ms; }
+.menu-drop { animation: drop 280ms var(--ease-out) both; }
+@keyframes drop { from { opacity: 0; transform: translateY(-10px); } }
+
+/* Smooth <details> open (FAQ, mobile submenus) where supported */
+@supports selector(::details-content) {
+  :root { interpolate-size: allow-keywords; }
+  details.smooth::details-content { height: 0; overflow: clip; transition: height 320ms var(--ease-out), content-visibility 320ms allow-discrete; }
+  details.smooth[open]::details-content { height: auto; }
+}
+
+/* Hero */
+.ken-burns { animation: ken-burns 7s ease-out both; }
+@keyframes ken-burns { from { transform: scale(1.08); } }
+.rise { animation: rise 700ms var(--ease-out) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+.slide-progress { animation: progress linear both; }
+@keyframes progress { from { transform: scaleX(0); } }
+
+/* Cart feedback */
+.toast-in { animation: toast-in 450ms var(--ease-spring) both; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(24px) scale(0.95); } }
+.toast-timer { animation: timer 3.2s linear both; }
+@keyframes timer { to { transform: scaleX(0); } }
+.check-draw path { stroke-dasharray: 1; animation: check 420ms 80ms var(--ease-out) both; }
+@keyframes check { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.pop-in { animation: pop-in 320ms var(--ease-spring) both; }
+@keyframes pop-in { from { opacity: 0; transform: scale(0.85); } }
+.badge-pop { animation: badge-pop 450ms var(--ease-spring) both; }
+@keyframes badge-pop { 0% { transform: scale(0.3); } 60% { transform: scale(1.25); } }
+.cart-wiggle { animation: wiggle 500ms ease-in-out; }
+@keyframes wiggle { 20% { transform: rotate(-12deg); } 40% { transform: rotate(10deg); } 60% { transform: rotate(-6deg); } 80% { transform: rotate(3deg); } }
+.item-in { animation: item-in 400ms var(--ease-out) both; }
+@keyframes item-in { from { opacity: 0; transform: translateX(-12px); } }
+.img-swap { animation: img-swap 400ms var(--ease-out) both; }
+@keyframes img-swap { from { opacity: 0; transform: scale(0.97); } }
+.shake { animation: shake 400ms ease-in-out; }
+@keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, ::before, ::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+/* Long-form copy (product descriptions, blog posts, policies) */
+.rich { @apply max-w-none leading-relaxed text-zinc-700; }
+.rich > * + * { margin-top: 1em; }
+.rich h2 { @apply mt-8 font-display text-2xl uppercase text-ink; }
+.rich h3 { @apply mt-6 text-xl font-bold text-ink; }
+.rich h4 { @apply mt-4 font-bold text-ink; }
+.rich a { @apply font-semibold text-brand underline-offset-2 hover:underline; }
+.rich strong, .rich b { @apply text-ink; }
+.rich ul { @apply list-disc space-y-1 pl-6; }
+.rich ol { @apply list-decimal space-y-1 pl-6; }
+.rich li::marker { color: var(--color-brand); }
+.rich table { @apply w-full border-collapse text-sm; }
+.rich th, .rich td { @apply border border-zinc-200 px-3 py-2 text-left; }
+.rich th { @apply bg-smoke text-ink; }
+.rich img { @apply rounded-lg; }
+.rich blockquote { @apply border-l-4 border-brand pl-4 italic; }
