@@ -14,6 +14,8 @@
   margin-inline: auto;
   padding-inline: 1rem;
   max-width: 80rem;
+  @media (width >= 40rem) { padding-inline: 1.5rem; }
+  @media (width >= 64rem) { padding-inline: 2rem; }
 }
 
 @layer components {
@@ -25,10 +27,35 @@
     @apply transition duration-300 ease-out hover:-translate-y-1 hover:border-ink hover:shadow-[0_16px_32px_-14px_rgb(11_11_11/0.35)];
   }
   .badge { @apply rounded px-1.5 py-0.5 text-[11px] font-bold uppercase; }
+
+  /* Footer-style dark panel: ink background, soft red glow, red gradient strip on top. */
+  .dark-panel {
+    @apply relative isolate overflow-hidden bg-ink text-zinc-300;
+  }
+  .dark-panel::before {
+    content: "";
+    @apply pointer-events-none absolute -top-40 left-1/2 -z-10 h-80 w-[60rem] max-w-[200%] -translate-x-1/2 rounded-full bg-brand/20 blur-3xl;
+  }
+  .dark-panel::after {
+    content: "";
+    @apply pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand via-brand-dark to-brand;
+  }
+  /* Glass card for dark panels */
+  .glass {
+    @apply rounded-2xl border border-white/10 bg-white/[0.03] transition duration-300 hover:border-brand/60 hover:bg-white/[0.06];
+  }
+  /* Soft card for light sections */
+  .soft-card {
+    @apply rounded-2xl border border-zinc-200 bg-white transition duration-300 hover:-translate-y-1 hover:border-brand/60 hover:shadow-[0_18px_40px_-20px_rgb(225_6_0/0.35)];
+  }
+  /* Outlined display text (footer wordmark style) */
+  .outline-text { color: transparent; -webkit-text-stroke: 1px rgb(255 255 255 / 0.12); }
+  .outline-text-dark { color: transparent; -webkit-text-stroke: 1px rgb(11 11 11 / 0.08); }
 }
 
 body {
   @apply bg-white text-ink antialiased;
+  overflow-x: clip;
 }
 
 .marquee { animation: marquee 38s linear infinite; }
@@ -113,6 +140,23 @@ html { scroll-behavior: smooth; }
   70%, 100% { background-position-y: 0.02em; } /* full, with the wave line still visible at the top */
 }
 
+/* Cart drawer (<dialog class="drawer">): slides in from the right, backdrop fades + blurs.
+   @starting-style gives the entry animation; allow-discrete keeps it rendered while sliding out. */
+.drawer {
+  translate: 100% 0;
+  transition: translate 380ms var(--ease-out), display 380ms allow-discrete, overlay 380ms allow-discrete;
+}
+.drawer[open] { translate: 0 0; }
+@starting-style { .drawer[open] { translate: 100% 0; } }
+.drawer::backdrop {
+  background: rgb(0 0 0 / 0);
+  backdrop-filter: blur(0);
+  transition: background 380ms, backdrop-filter 380ms, display 380ms allow-discrete, overlay 380ms allow-discrete;
+}
+.drawer[open]::backdrop { background: rgb(0 0 0 / 0.55); backdrop-filter: blur(3px); }
+@starting-style { .drawer[open]::backdrop { background: rgb(0 0 0 / 0); backdrop-filter: blur(0); } }
+html:has(.drawer[open]) { overflow: hidden; }
+
 /* Age dialog doodles: gentle float */
 .doodle { animation: doodle-float 6s ease-in-out infinite alternate both; }
 @keyframes doodle-float { to { translate: 0 -6px; } }
@@ -124,7 +168,7 @@ html { scroll-behavior: smooth; }
 }
 
 /* Long-form copy (product descriptions, blog posts, policies) */
-.rich { @apply max-w-none leading-relaxed text-zinc-700; }
+.rich { @apply max-w-none leading-relaxed text-zinc-700 [overflow-wrap:anywhere]; }
 .rich > * + * { margin-top: 1em; }
 .rich h2 { @apply mt-8 font-display text-2xl uppercase text-ink; }
 .rich h3 { @apply mt-6 text-xl font-bold text-ink; }
@@ -134,8 +178,8 @@ html { scroll-behavior: smooth; }
 .rich ul { @apply list-disc space-y-1 pl-6; }
 .rich ol { @apply list-decimal space-y-1 pl-6; }
 .rich li::marker { color: var(--color-brand); }
-.rich table { @apply w-full border-collapse text-sm; }
+.rich table { @apply block w-full overflow-x-auto border-collapse text-sm; }
 .rich th, .rich td { @apply border border-zinc-200 px-3 py-2 text-left; }
 .rich th { @apply bg-smoke text-ink; }
-.rich img { @apply rounded-lg; }
+.rich img { @apply h-auto max-w-full rounded-lg; }
 .rich blockquote { @apply border-l-4 border-brand pl-4 italic; }

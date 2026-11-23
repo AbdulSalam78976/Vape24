@@ -20,7 +20,7 @@ export function CheckoutSteps({ current }: { current: number }) {
                 n + 1
               )}
             </span>
-            <span className={on || done ? "text-ink" : "text-zinc-400"}>{s}</span>
+            <span className={`hidden min-[380px]:inline ${on || done ? "text-ink" : "text-zinc-400"}`}>{s}</span>
             {n < STEPS.length - 1 && (
               <span className="relative mx-1 h-0.5 flex-1 overflow-hidden rounded bg-zinc-200">
                 <span className={`absolute inset-0 origin-left bg-brand transition-transform duration-700 ease-out ${done ? "scale-x-100" : "scale-x-0"}`} />

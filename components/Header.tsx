@@ -1,3 +1,4 @@
+import Form from "next/form";
 import Image from "next/image";
 import Link from "next/link";
 import { CartButton } from "@/components/CartButton";
@@ -17,19 +18,19 @@ function TopBars() {
 
 function SearchForm({ id }: { id: string }) {
   return (
-    <form action="/search" role="search" className="relative w-full">
+    <Form action="/search" role="search" className="relative w-full">
       <label htmlFor={id} className="sr-only">Search</label>
-      <input id={id} name="q" type="search" placeholder="Search products…" className="w-full rounded-full border-2 border-ink/10 bg-smoke py-2.5 pl-5 pr-12 text-sm outline-none focus:border-brand focus:bg-white" />
+      <input id={id} name="q" type="search" required autoComplete="off" enterKeyHint="search" placeholder="Search products…" className="w-full rounded-full border-2 border-ink/10 bg-smoke py-2.5 pl-5 pr-12 text-sm outline-none focus:border-brand focus:bg-white" />
       <button aria-label="Search" className="absolute right-1.5 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full bg-brand text-white transition hover:bg-brand-dark active:scale-90">
         <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth={2.5}><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
       </button>
-    </form>
+    </Form>
   );
 }
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-40 bg-white shadow-sm" style={{ viewTransitionName: "site-header" }}>
+    <header className="sticky top-0 z-40 border-b border-zinc-200/70 bg-white/90 shadow-[0_8px_30px_-20px_rgb(11_11_11/0.3)] backdrop-blur-lg supports-[backdrop-filter]:bg-white/75" style={{ viewTransitionName: "site-header" }}>
       <TopBars />
       <div className="container flex items-center gap-3 py-2 xl:gap-5 xl:py-0">
         <details className="group xl:hidden">

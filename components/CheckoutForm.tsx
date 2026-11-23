@@ -8,7 +8,6 @@ import { Field } from "@/components/Field";
 import { FormSection } from "@/components/FormSection";
 import { FreeShippingBar } from "@/components/FreeShippingBar";
 import { OrderSuccess, type PlacedOrder } from "@/components/OrderSuccess";
-import { TrustRow } from "@/components/TrustRow";
 import { cart, cartCount, cartTotal, useCart } from "@/lib/cart";
 import { SITE, US_STATES } from "@/lib/site";
 
@@ -175,7 +174,6 @@ export function CheckoutForm() {
               </>
             )}
           </button>
-          <TrustRow />
         </aside>
       </form>
     </>

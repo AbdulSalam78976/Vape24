@@ -7,7 +7,7 @@ export function ProductCard({ p, badge }: { p: Product; badge?: string }) {
   const off = discount(p);
   const img = p.images[0] ?? "/logo.jpg";
   return (
-    <article className="card-lift group relative flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white">
+    <article className="card-lift group relative flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white">
       <Link href={`/${p.slug}`} className="relative block aspect-square overflow-hidden bg-white">
         <span className="absolute inset-0 bg-[radial-gradient(circle_at_50%_60%,rgb(225_6_0/0.10),transparent_65%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         <Image src={img} alt={p.name} fill sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw" className="object-contain p-3 transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-[1.06]" />

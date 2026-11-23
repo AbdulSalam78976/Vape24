@@ -15,7 +15,7 @@ export function AgeGate() {
   return (
     <div role="dialog" aria-modal="true" aria-labelledby="age-title" aria-describedby="age-desc" className="fixed inset-0 z-[100] grid place-items-center bg-black/85 p-4 backdrop-blur-sm">
       <style>{"body{overflow:hidden}"}</style>
-      <div className="pop-in relative w-full max-w-md overflow-hidden rounded-2xl bg-white text-center shadow-2xl">
+      <div className="pop-in relative max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto overflow-x-hidden rounded-2xl bg-white text-center shadow-2xl">
         <AgeDoodles />
         <div className="relative h-1.5 bg-brand" />
         <div className="relative p-8">

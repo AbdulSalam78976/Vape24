@@ -6,6 +6,9 @@ export type CartItem = { key: string; slug: string; name: string; image: string;
 const KEY = "vape24-cart";
 /** window event fired by cart.add — the toast listens for it */
 export const ADDED = "vape24:cart-added";
+/** window event that opens the cart drawer */
+export const OPEN_CART = "vape24:open-cart";
+export const openCart = () => window.dispatchEvent(new Event(OPEN_CART));
 const EMPTY: CartItem[] = [];
 let items: CartItem[] | null = null;
 const listeners = new Set<() => void>();

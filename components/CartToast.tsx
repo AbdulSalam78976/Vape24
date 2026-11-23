@@ -1,8 +1,7 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ADDED, type CartItem } from "@/lib/cart";
+import { ADDED, openCart, type CartItem } from "@/lib/cart";
 
 type Added = Omit<CartItem, "key"> & { id: number };
 
@@ -33,7 +32,7 @@ export function CartToast() {
         <span className="block truncate text-sm font-semibold">{added.qty > 1 ? `${added.qty} × ` : ""}{added.name}</span>
         {added.option && <span className="block truncate text-xs text-zinc-400">{added.option}</span>}
       </span>
-      <Link href="/cart" className="shrink-0 rounded-md bg-brand px-3 py-2 text-xs font-bold transition hover:bg-brand-dark active:scale-95">View cart</Link>
+      <button type="button" onClick={() => (setAdded(null), openCart())} className="shrink-0 rounded-md bg-brand px-3 py-2 text-xs font-bold transition hover:bg-brand-dark active:scale-95">View cart</button>
       <span className="toast-timer absolute inset-x-3 bottom-0 h-0.5 origin-left rounded bg-brand" />
     </div>
   );

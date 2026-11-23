@@ -21,18 +21,17 @@ const DOODLES = Array.from({ length: COLS * ROWS }, (_, n) => ({
   top: (Math.floor(n / COLS) + 0.15 + rand() * 0.7) * (100 / ROWS),
   size: 22 + Math.round(rand() * 18),
   rotate: Math.round(rand() * 70 - 35),
-  red: rand() < 0.3,
   delay: (rand() * 4).toFixed(2),
 }));
 
-/** Doodle background of the hookah / pipe / vape icons in /public, tinted via CSS mask. */
+/** Doodle background of the hookah / pipe / vape icons in /public, drawn black via CSS mask. */
 export function AgeDoodles() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       {DOODLES.map((d, i) => (
         <span
           key={i}
-          className={`doodle absolute ${d.red ? "bg-brand opacity-60" : "bg-ink opacity-30"}`}
+          className="doodle absolute bg-ink opacity-30"
           style={{
             left: `${d.left}%`,
             top: `${d.top}%`,

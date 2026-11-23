@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Anton, Inter } from "next/font/google";
 import { ViewTransition } from "react";
 import { AgeGate } from "@/components/AgeGate";
+import { CartDrawer } from "@/components/CartDrawer";
 import { CartToast } from "@/components/CartToast";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </ViewTransition>
         <Footer />
         <CartToast />
+        <CartDrawer />
         <AgeGate />
       </body>
     </html>

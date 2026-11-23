@@ -4,7 +4,6 @@ import Link from "next/link";
 import { CheckoutSteps } from "@/components/CheckoutSteps";
 import { EmptyCart } from "@/components/EmptyCart";
 import { FreeShippingBar } from "@/components/FreeShippingBar";
-import { TrustRow } from "@/components/TrustRow";
 import { cart, cartCount, cartTotal, useCart } from "@/lib/cart";
 import { SITE } from "@/lib/site";
 
@@ -85,7 +84,6 @@ export function CartView() {
             Secure Checkout
             <span className="transition-transform group-hover:translate-x-1">→</span>
           </Link>
-          <TrustRow />
           <p className="text-center text-xs text-zinc-500">Adult signature (21+) required on delivery.</p>
         </aside>
       </div>
