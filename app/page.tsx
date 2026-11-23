@@ -1,17 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { HeroSlider } from "@/components/HeroSlider";
+import { Hero } from "@/components/Hero";
 import { Newsletter } from "@/components/Newsletter";
 import { Icon } from "@/components/Icon";
 import { Rail } from "@/components/Rail";
 import { SectionHead } from "@/components/SectionHead";
 import { fmtDate, posts, productsFor } from "@/lib/data";
 import { BRANDS, SITE } from "@/lib/site";
-
-const SLIDES = [
-  { d: "/images/wysiwyg/heroslider/vape-city-usa-deals-d.webp", m: "/images/wysiwyg/heroslider/vape-city-usa-deals-m.webp", eyebrow: "DEALS LIVE NOW", title: "Weekly", accent: "Vape Deals.", text: "Shop this week's offers on disposables, pods, pouches and hemp. New deals drop every weekend while supplies last.", cta: "Shop All Deals", href: "/deals" },
-  { d: "/images/wysiwyg/heroslider/foger-switch-pro-new-pod-flavors-d.webp", m: "/images/wysiwyg/heroslider/foger-switch-pro-new-pod-flavors-m_1.webp", eyebrow: "NEW FLAVORS", title: "Every Flavor.", accent: "In Stock.", text: "The full Foger Switch Pro lineup is here.", cta: "Find Your Flavor", href: "/shop-by-brand/foger" },
-];
 
 const CATS = [
   { title: "Disposable Vapes", text: "Ready-to-use devices with high puff counts and bold flavors.", img: "disposable-vapes", href: "/disposable-vapes" },
@@ -24,7 +19,7 @@ export default function Home() {
   return (
     <>
       <h1 className="sr-only">Best Online Vape Store: Disposable Vapes, E-Liquids &amp; Nicotine Pouches</h1>
-      <HeroSlider slides={SLIDES} />
+      <Hero />
 
       <section aria-label={`Why choose ${SITE.name}`} className="border-b border-zinc-200 bg-smoke">
         <ul className="container grid grid-cols-2 gap-4 py-6 md:grid-cols-5">
@@ -42,13 +37,13 @@ export default function Home() {
         <ul className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {CATS.map((c) => (
             <li key={c.href}>
-              <Link href={c.href} className="group flex h-full flex-col overflow-hidden rounded-xl bg-ink text-white transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-12px_rgb(225_6_0/0.55)] hover:ring-2 hover:ring-brand">
-                <span className="relative block aspect-square bg-gradient-to-b from-zinc-800 to-ink">
-                  <Image src={`/images/wysiwyg/category/${c.img}-category.png`} alt="" fill sizes="(min-width:1024px) 25vw, 50vw" className="object-contain p-4 transition group-hover:scale-105" />
+              <Link href={c.href} className="group flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white text-ink transition duration-300 hover:-translate-y-1 hover:border-brand hover:shadow-[0_18px_40px_-16px_rgb(225_6_0/0.35)]">
+                <span className="relative block aspect-square bg-white">
+                  <Image src={`/images/wysiwyg/category/${c.img}-category.jpg`} alt="" fill sizes="(min-width:1024px) 25vw, 50vw" className="object-contain p-4 transition group-hover:scale-105" />
                 </span>
                 <span className="p-4">
                   <b className="font-display block text-xl uppercase">{c.title} <span className="text-brand">→</span></b>
-                  <span className="mt-1 block text-sm text-zinc-400">{c.text}</span>
+                  <span className="mt-1 block text-sm text-zinc-600">{c.text}</span>
                 </span>
               </Link>
             </li>

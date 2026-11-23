@@ -36,34 +36,6 @@ body {
 @keyframes marquee { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .marquee { animation: none; } }
 
-/* Pipe loader: draw line 0–1.6s → fill → ember 1.8s → smoke 2s+ */
-.pipe-draw { stroke-dasharray: 1; fill-opacity: 0; animation: pipe-draw 2s ease-in-out both; }
-@keyframes pipe-draw {
-  0% { stroke-dashoffset: 1; fill-opacity: 0; }
-  75% { stroke-dashoffset: 0; fill-opacity: 0; }
-  100% { stroke-dashoffset: 0; fill-opacity: 1; }
-}
-.pipe-ember { opacity: 0; animation: ember-on 0.4s 1.8s both, ember-glow 1.2s 2.2s ease-in-out infinite; }
-@keyframes ember-on { to { opacity: 1; } }
-@keyframes ember-glow { 50% { opacity: 0.6; } }
-.pipe-smoke-line { stroke-dasharray: 1; animation: smoke-line 2.2s ease-out 2s infinite both; }
-@keyframes smoke-line {
-  0% { stroke-dashoffset: 1; opacity: 0; transform: translateY(0); }
-  15% { opacity: 0.9; }
-  60% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: 0; opacity: 0; transform: translateY(-24px); }
-}
-.pipe-puff { transform-box: fill-box; transform-origin: center; animation: puff 2.2s ease-out infinite both; }
-@keyframes puff {
-  0% { transform: translate(0, 0) scale(0.3); opacity: 0; }
-  25% { opacity: 0.8; }
-  100% { transform: translate(-12px, -70px) scale(2.6); opacity: 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .pipe-draw, .pipe-ember, .pipe-smoke-line, .pipe-puff { animation: none; opacity: 1; fill-opacity: 1; stroke-dashoffset: 0; }
-  .pipe-puff { opacity: 0.4; }
-}
-
 /* ───────────── Motion system ───────────── */
 :root { --ease-out: cubic-bezier(0.22, 1, 0.36, 1); --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); }
 html { scroll-behavior: smooth; }
@@ -102,8 +74,6 @@ html { scroll-behavior: smooth; }
 @keyframes ken-burns { from { transform: scale(1.08); } }
 .rise { animation: rise 700ms var(--ease-out) both; }
 @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
-.slide-progress { animation: progress linear both; }
-@keyframes progress { from { transform: scaleX(0); } }
 
 /* Cart feedback */
 .toast-in { animation: toast-in 450ms var(--ease-spring) both; }
@@ -124,6 +94,28 @@ html { scroll-behavior: smooth; }
 @keyframes img-swap { from { opacity: 0; transform: scale(0.97); } }
 .shake { animation: shake 400ms ease-in-out; }
 @keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+
+/* Footer wordmark: liquid rising inside the letters. A tall wave image (1.6em × 8em, wave on top, solid
+   red below) is clipped to the text; x scrolls for the wave, y lowers the image to raise the fill level. */
+.liquid-text {
+  color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 1000' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ff4136'/%3E%3Cstop offset='.12' stop-color='%23e10600'/%3E%3Cstop offset='1' stop-color='%23700300'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 14 Q25 0 50 14 T100 14 T150 14 T200 14 V1000 H0Z' fill='url(%23g)'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 1.6em 8em;
+  background-position: 0 0.85em;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: liquid-wave 2.4s linear infinite, liquid-fill 7s ease-in-out infinite alternate both;
+}
+@keyframes liquid-wave { to { background-position-x: 1.6em; } }
+@keyframes liquid-fill {
+  0% { background-position-y: 0.85em; }   /* empty: wave sits below the letters */
+  70%, 100% { background-position-y: 0.02em; } /* full, with the wave line still visible at the top */
+}
+
+/* Age dialog doodles: gentle float */
+.doodle { animation: doodle-float 6s ease-in-out infinite alternate both; }
+@keyframes doodle-float { to { translate: 0 -6px; } }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

@@ -19,7 +19,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${inter.variable} ${anton.variable}`}>
-      <body className="flex min-h-screen flex-col font-sans">
+      {/* Browser extensions (e.g. ColorZilla's cz-shortcut-listen) add attributes to <body> before hydration. */}
+      <body className="flex min-h-screen flex-col font-sans" suppressHydrationWarning>
         <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-3">Skip to Content</a>
         <Header />
         {/* Route changes crossfade + rise (.page in globals.css); header stays pinned. */}
